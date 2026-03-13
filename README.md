@@ -16,10 +16,11 @@ This project produces a honeypot that listens on any number of user-configurable
 ## Programming
 ### Prepare configuration details for your device:  
 - Host name
-- Device IP address and subnet mask
+- Device IP address, gateway, and subnet mask
 - DNS servers
 - Syslog collector IP
 - NTP server
+- Comma separated list of TCP and/or UDP ports to listen on
 ### Flash and configure the device:
 _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating this process takes 3 minutes from start to finish._  
 1. [Set up your Arduino programming environment](https://github.com/Xorlent/PoE-Honeypot/blob/main/ARDUINO-SETUP.md)
@@ -27,11 +28,11 @@ _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating
    - Select Tools->Board->esp32 and select "ESP32P4 Dev Module"
    - Configure board settings according to the [Unit-PoE-P4 Board Configuration](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/ESP32P4-Config.jpg)
 3. Connect the Unit-PoE-P4 to your computer via USB
+   - Select Tools->Port and select the device port
+     - If you're unsure, unplug the device, look at the port list, then plug it back in and select the new entry
 > [!WARNING]
 > Do not plug the device into Ethernet until after step 6 or you risk damaging your USB port!
 4. In Arduino
-   - Select Tools->Port and select the device port
-     - If you're unsure, unplug the device, look at the port list, then plug it back in and select the new entry (repeating step 5)
    - Select Sketch->Upload to flash the device
    - When you see something similar to the following, proceed to step 4
 ```
@@ -43,13 +44,13 @@ Hard resetting via RTS pin...
 ```
 5. In Arduino
    - Select Tools->Serial Monitor
-   - Following the prompts, configure the device
+   - Following the prompts to configure the device
 6. When configuration is complete, disconnect the USB cable
 7. Connect the device to a PoE network port and mount as appropriate
 8. Configure your syslog alerts as appropriate
     - Add alert triggers based on events received from these devices to get immediate notice of possible malicious lateral movement
     - Example Syslog event from IP 10.70.103.12 connecting to TCP port 80:  
-    ```<116>Jun 05 17:48:40 PoESP-Honeypot TCP/80: Connection from 10.70.103.12```
+    ```<116>Jun 05 17:48:40 PoE-Honeypot TCP/80: Connection from 10.70.103.12```
 
 ## Guidance and Limitations
 - The device produces Syslog UDP messages in the BSD / RFC 3164 format.
