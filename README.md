@@ -25,10 +25,10 @@ _Once you've successfully programmed a single unit, skip step 1.  Repeating this
 1. [Set up your Arduino programming environment](https://github.com/Xorlent/PoE-Honeypot/blob/main/ARDUINO-SETUP.md)
 2. In Arduino, open the project file (PoE-Honeypot.ino)
    - Select Tools->Board->esp32 and select "ESP32P4 Dev Module"
-   - Configure board settings according to [Unit-PoE-P4 Board Configuration](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/ESP32P4-Config.jpg)
+   - Configure board settings according to the [Unit-PoE-P4 Board Configuration](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/ESP32P4-Config.jpg)
 3. Connect the Unit-PoE-P4 to your computer via USB
 > [!WARNING]
-> Do not plug the device into Ethernet until after step 5 or you risk damaging your USB port!
+> Do not plug the device into Ethernet until after step 6 or you risk damaging your USB port!
 4. In Arduino
    - Select Tools->Port and select the USB-to-serial adapter
      - If you're unsure, unplug the USB-to-serial adapter, look at the port list, then plug it back in and select the new entry (repeating step 5)
@@ -41,7 +41,7 @@ _Once you've successfully programmed a single unit, skip step 1.  Repeating this
 
      Leaving...
      Hard resetting via RTS pin...
-4. In Arduino
+5. In Arduino
    - Select Tools->Serial Monitor
    - Following the prompts, configure the device
 6. When configuration is complete, disconnect the USB cable
