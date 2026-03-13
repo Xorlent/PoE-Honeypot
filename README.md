@@ -9,7 +9,8 @@ Use this honeypot in conjunction with the [ESP32-Watchman](https://github.com/Xo
 
 ## Requirements
 1. M5Stack [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4), currently $21.50 USD
-2. A Syslog collector (free open source options exist, as well as Graylog Open)
+2. USB-C cable for programming
+3. A Syslog collector (free open source options exist, as well as Graylog Open)
 
 ## Functional Description
 This project produces a honeypot that listens on any number of user-configurable TCP and UDP ports.  If activity is detected, a Syslog (UDP) message is immediately sent with information about the source IP and port accessed.  The device is reconfigurable via a USB-C serial console connection.
