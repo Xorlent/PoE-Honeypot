@@ -5,7 +5,7 @@ The world's lowest cost honeypot appliance
 ## Background
 After completing the [$26 Honeypot project](https://github.com/Xorlent/The-26-Dollar-Honeypot), I still hoped to build a version that could listen on an unlimited number of TCP ports, included support for UDP and ICMP, and required no additional programmer tool or disassembly.  Two weeks ago I found M5Stack's new [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4) and got to work addressing the shortcomings of their earlier, less capable, and slightly more expensive PoESP32 device.
   
-Use this honeypot in conjunction with the [ESP32-Watchman](https://github.com/Xorlent/ESP32-Watchman) for full physical and cyber sensing capabilities with a total cost of under $60.
+Use this honeypot in conjunction with the [ESP32-Watchman](https://github.com/Xorlent/ESP32-Watchman) for full physical and network sensing capabilities with a total cost of under $60.
 
 ## Requirements
 1. M5Stack [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4), currently $21.50 USD
