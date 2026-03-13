@@ -59,11 +59,15 @@ Hard resetting via RTS pin...
 - The device will respond to pings (will not generate Syslog events) from any IP address within the routable network.
 
 ## Technical Information
+- CPU and Memory
+  - 360MHz dual core + 40MHz LP core RISC-V
+  - 768KBytes RAM
+  - 16MBytes Flash + 32MBytes PSRAM
 - Operating Specifications
-  - Operating temperature: 0°F (-17.7°C) to 140°F (60°C)
+  - Operating temperature: 0°F (-17.7°C) to 104°F (40°C)
   - Operating humidity: 5% to 90% (RH), non-condensing
 - Power Consumption
-  - 8W maximum via 802.3af Power-over-Ethernet
+  - 6W maximum via 802.3af Power-over-Ethernet
 - Ethernet
   - IP101GRI or TLK110 PHY
   - 10/100 Mbit twisted pair copper
