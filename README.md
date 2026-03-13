@@ -34,13 +34,13 @@ _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating
      - If you're unsure, unplug the device, look at the port list, then plug it back in and select the new entry (repeating step 5)
    - Select Sketch->Upload to flash the device
    - When you see something similar to the following, proceed to step 4
-```
+   ```
 Writing at 0x000f4830 [==============================] 100.0% 495157/495157 bytes... 
 Wrote 935984 bytes (495157 compressed) at 0x00010000 in 3.6 seconds (2098.6 kbit/s).
 Hash of data verified.
 
 Hard resetting via RTS pin...
-```
+   ```
 5. In Arduino
    - Select Tools->Serial Monitor
    - Following the prompts, configure the device
