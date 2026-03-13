@@ -1,6 +1,7 @@
-# PoE Powered ESP32-P4 Honeypot (Improved version of the $26 Honeypot)
+# WORK IN PROGRESS
+## PoE Powered ESP32-P4 Honeypot (Improved version of the $26 Honeypot)
 The world's lowest cost honeypot appliance  
-![ESP32-P4 Honeypot Image](https://github.com/Xorlent/The-26-Dollar-Honeypot/blob/main/images/PoESP32-Honeypot.jpg)
+![ESP32-P4 Honeypot Image](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/PoESP32-Honeypot.jpg)
 ## Background
 After being fairly happy with the [$26 Honeypot project](https://github.com/Xorlent/The-26-Dollar-Honeypot), I still hoped to build a version that could listen on an unlimited number of TCP ports, included support for UDP and ICMP, and required no additional programmer tool or disassembly.  Two weeks ago I found M5Stack's new [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4) and got to work addressing the shortcomings of their earlier, less capable, and slightly more expensive PoESP32 device.
   
