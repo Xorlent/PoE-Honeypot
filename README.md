@@ -65,6 +65,6 @@ Hard resetting via RTS pin...
 - Power Consumption
   - 8W maximum via 802.3af Power-over-Ethernet
 - Ethernet
-  - TLK110 PHY
+  - IP101GRI or TLK110 PHY
   - 10/100 Mbit twisted pair copper
   - IEEE 802.3af Power-over-Ethernet
