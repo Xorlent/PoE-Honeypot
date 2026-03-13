@@ -1,15 +1,14 @@
-# The $26 Honeypot
+# PoE ESP32-P4 Honeypot (Improved)
 The world's lowest cost honeypot appliance  
-![PoESP32 Honeypot Image](https://github.com/Xorlent/The-26-Dollar-Honeypot/blob/main/images/PoESP32-Honeypot.jpg)
+![ESP32-P4 Honeypot Image](https://github.com/Xorlent/The-26-Dollar-Honeypot/blob/main/images/PoESP32-Honeypot.jpg)
 ## Background
-After completing the [$32 network environmental monitoring project](https://github.com/Xorlent/PoESP32-SNMP-Environmental-Monitor) and marveling at the miniscule cost and excellent packaging of the M5Stack PoESP32 device, I contemplated other applications where this device could provide value.  A network honeypot was the first thing that came to mind.  For maximum performance and minimal code footprint, this code uses TCP sockets directly instead of Arduino wrappers.  
+After being fairly happy with the [$26 Honeypot project](https://github.com/Xorlent/The-26-Dollar-Honeypot), I still hoped I could build a version that could listen on an unlimited number of TCP ports, included support for UDP and ICMP, and required no additional programmer tool or disassembly.  Two weeks ago I found M5Stack's new [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4) and got to work addressing the shortcomings of their earlier, less capable, and slightly more expensive PoESP32 device.
   
-Use this honeypot in conjunction with an [ESP32-Watchman](https://github.com/Xorlent/ESP32-Watchman), for full physical and cyber sensing capabilities with a total cost of under $70.
+Use this honeypot in conjunction with an [ESP32-Watchman](https://github.com/Xorlent/ESP32-Watchman), for full physical and cyber sensing capabilities with a total cost of under $60.
 
 ## Requirements
-1. M5Stack [PoESP32 device](https://shop.m5stack.com/products/esp32-ethernet-unit-with-poe), currently $25.90 USD
-2. A single [M5Stack ESP32 Downloader kit](https://shop.m5stack.com/products/esp32-downloader-kit), currently $9.95 USD
-3. A Syslog collector (free open source options exist, as well as Graylog Open)
+1. M5Stack [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4), currently $21.50 USD
+2. A Syslog collector (free open source options exist, as well as Graylog Open)
 
 ## Functional Description
 This project produces a honeypot that listens on commonly targeted TCP ports.  If activity is detected, a Syslog (UDP) message is immediately sent with information about the source IP and port accessed.  The device is not remotely managable.  If you need to change any configuration details, a re-flash/re-programming is necessary:
