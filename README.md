@@ -14,13 +14,13 @@ Use this honeypot in conjunction with an [ESP32-Watchman](https://github.com/Xor
 ## Functional Description
 This project produces a honeypot that listens on any number of user-configurable TCP and UDP ports.  If activity is detected, a Syslog (UDP) message is immediately sent with information about the source IP and port accessed.  The device is reconfigurable via a USB-C serial console connection.
 ## Programming
-_Once you've successfully programmed a single unit, skip step 1.  Repeating this process takes 3 minutes from start to finish._  
 Prepare the following configuration details for your device:  
 - Host name
 - Device IP address and subnet mask
 - DNS servers
 - Syslog collector IP
-- NTP server  
+- NTP server
+_Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating this process takes 3 minutes from start to finish._  
 1. [Set up your Arduino programming environment](https://github.com/Xorlent/PoE-Honeypot/blob/main/ARDUINO-SETUP.md)
 2. In Arduino, open the project file (PoE-Honeypot.ino)
    - Select Tools->Board->esp32 and select "ESP32P4 Dev Module"
