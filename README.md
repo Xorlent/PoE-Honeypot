@@ -25,6 +25,7 @@ _Once you've successfully programmed a single unit, skip step 1.  Repeating this
 1. [Set up your Arduino programming environment](https://github.com/Xorlent/PoE-Honeypot/blob/main/ARDUINO-SETUP.md)
 2. In Arduino, open the project file (PoE-Honeypot.ino)
    - Select Tools->Board->esp32 and select "ESP32P4 Dev Module"
+   - Configure board settings according to [Unit-PoE-P4 Board Configuration](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/ESP32P4-Config.jpg)
 3. Connect the Unit-PoE-P4 to your computer via USB
 > [!WARNING]
 > Do not plug the device into Ethernet until after step 5 or you risk damaging your USB port!
