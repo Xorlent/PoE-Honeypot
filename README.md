@@ -30,8 +30,8 @@ _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating
 > [!WARNING]
 > Do not plug the device into Ethernet until after step 6 or you risk damaging your USB port!
 4. In Arduino
-   - Select Tools->Port and select the USB-to-serial adapter
-     - If you're unsure, unplug the USB-to-serial adapter, look at the port list, then plug it back in and select the new entry (repeating step 5)
+   - Select Tools->Port and select the device port
+     - If you're unsure, unplug the device, look at the port list, then plug it back in and select the new entry (repeating step 5)
    - Select Sketch->Upload to flash the device
    - When you see something similar to the following, proceed to step 4
 ```
