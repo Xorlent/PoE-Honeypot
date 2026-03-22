@@ -37,7 +37,7 @@ _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating
 4. In Arduino
    - Edit Config.h with configuration details for the device
    - Select Sketch->Upload to flash the device
-   - When you see something similar to the following, proceed to step 4
+   - When you see something similar to the following, proceed to step 5
 ```
 Writing at 0x000f4830 [==============================] 100.0% 495157/495157 bytes... 
 Wrote 935984 bytes (495157 compressed) at 0x00010000 in 3.6 seconds (2098.6 kbit/s).
@@ -47,11 +47,12 @@ Hard resetting via RTS pin...
 ```
 5. In Arduino
    - Select Tools->Serial Monitor
-   - Address any displayed configuration errors or warnings
+   - Address any configuration errors or warnings shown in the serial console
+     - If you did not immediately open the serial monitor, you may need to reboot the device to see the configuration check output
 6. When configuration is complete, disconnect the USB cable
 7. Connect the device to a PoE network port and mount as appropriate
-8. Configure your syslog alerts as appropriate
-    - Add alert triggers based on events received from these devices to get immediate notice of possible malicious lateral movement
+8. Configure your syslog alerts:
+    - Add alert triggers based on events received from the device to get immediate notice of postential scanning and lateral movement
     - Example Syslog event for IP 10.70.103.12 connecting to TCP port 443:  
     ```<36>Mar 22 21:12:52 PoE-Honeypot TCP/443 (https): Connection from 10.70.103.12```
     - Example Syslog event for IP 10.70.103.12 connecting to UDP port 137:  
