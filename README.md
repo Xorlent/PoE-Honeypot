@@ -52,11 +52,11 @@ Hard resetting via RTS pin...
 7. Connect the device to a PoE network port and mount as appropriate
 8. Configure your syslog alerts as appropriate
     - Add alert triggers based on events received from these devices to get immediate notice of possible malicious lateral movement
-    - Example Syslog event for IP 10.70.103.12 connecting to TCP port 443:
+    - Example Syslog event for IP 10.70.103.12 connecting to TCP port 443:  
     ```<36>Mar 22 21:12:52 PoE-Honeypot TCP/443 (https): Connection from 10.70.103.12```
     - Example Syslog event for IP 10.70.103.12 connecting to UDP port 137:  
     ```<36>Mar 22 21:04:56 PoE-Honeypot UDP/137 (netbios-ns): Connection from 10.70.103.12```
-    - Example Syslog event for IP 10.70.103.12 sending a ping request to the honeypot:
+    - Example Syslog event for IP 10.70.103.12 sending a ping request to the honeypot:  
     ```<36>Mar 22 21:15:45 PoE-Honeypot ICMP/Type 8 (echo-request): Ping request from 10.70.103.12```
 ## Guidance and Limitations
 - The device produces Syslog UDP messages in the BSD / RFC 3164 format.
