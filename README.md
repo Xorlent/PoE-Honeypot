@@ -1,9 +1,9 @@
 # WORK IN PROGRESS
 ## PoE Powered ESP32-P4 Honeypot (Improved version of the $26 Honeypot)
 The world's lowest cost honeypot appliance  
-![ESP32-P4 Honeypot Image](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/PoESP32-Honeypot.jpg)
+![ESP32-P4 Honeypot Image](https://github.com/Xorlent/PoE-Honeypot/blob/main/images/PoE-Honeypot.jpg)
 ## Background
-After completing the [$26 Honeypot project](https://github.com/Xorlent/The-26-Dollar-Honeypot), I still hoped to build a version that could listen on an unlimited number of TCP ports, included support for UDP and ICMP, and required no additional programmer tool or disassembly.  Two weeks ago I found M5Stack's new [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4) and got to work addressing the shortcomings of their earlier, less capable, and slightly more expensive PoESP32 device.
+After completing the [$26 Honeypot project](https://github.com/Xorlent/The-26-Dollar-Honeypot), I still hoped to build a version that could listen on an unlimited number of TCP ports, included support for UDP and ICMP, and required no additional programmer tool or disassembly.  Recently I found M5Stack's new [Unit-PoE-P4](https://shop.m5stack.com/products/unit-poe-with-esp32-p4) and got to work addressing the shortcomings of their earlier, less capable, and slightly more expensive PoESP32 device.
   
 Use this honeypot in conjunction with the [ESP32-Watchman](https://github.com/Xorlent/ESP32-Watchman) for full physical and network sensing capabilities with a total cost of under $60.
 
@@ -13,16 +13,17 @@ Use this honeypot in conjunction with the [ESP32-Watchman](https://github.com/Xo
 3. A Syslog collector (free open source options exist, as well as Graylog Open)
 
 ## Functional Description
-This project produces a honeypot that listens on any number of user-configurable TCP and UDP ports.  If activity is detected, a Syslog (UDP) message is immediately sent with information about the source IP and port accessed.  The device is reconfigurable via a USB-C serial console connection.
+This project produces a honeypot that listens on any number of user-configurable TCP and UDP ports.  If activity is detected, a Syslog (UDP) message or an email is immediately sent with information about the source IP and port accessed.  The device can also be configured to alert on ICMP ping requests, but note the device will not respond to any pings if ICMP is enabled.  The device is reconfigurable via a USB-C serial console connection.  
 ## Programming
 ### Prepare configuration details for your device:  
 - Host name
 - Device IP address, gateway, and subnet mask
 - DNS servers
-- Syslog collector IP
+- Syslog collector IP or SMTP relay IP
+- Email to and from addresses if email (USE_SMTP) is configured
 - NTP server
-- Comma separated list of TCP and/or UDP ports to listen on
-### Flash and configure the device:
+- TCP and/or UDP ports to listen on
+### Configure and flash the device:
 _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating this process takes 3 minutes from start to finish._  
 1. [Set up your Arduino programming environment](https://github.com/Xorlent/PoE-Honeypot/blob/main/ARDUINO-SETUP.md)
 2. In Arduino, open the project file (PoE-Honeypot.ino)
@@ -32,8 +33,9 @@ _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating
    - Select Tools->Port and select the device port
      - If you're unsure, unplug the device, look at the port list, then plug it back in and select the new entry
 > [!WARNING]
-> Do not plug the device into Ethernet until after step 6 or you risk damaging your USB port!
+> Do not plug the device into a PoE-powered Ethernet port until after step 6 or you risk damaging your USB port!
 4. In Arduino
+   - Edit Config.h with configuration details for the device
    - Select Sketch->Upload to flash the device
    - When you see something similar to the following, proceed to step 4
 ```
@@ -45,7 +47,7 @@ Hard resetting via RTS pin...
 ```
 5. In Arduino
    - Select Tools->Serial Monitor
-   - Following the prompts to configure the device
+   - Address any displayed configuration errors or warnings
 6. When configuration is complete, disconnect the USB cable
 7. Connect the device to a PoE network port and mount as appropriate
 8. Configure your syslog alerts as appropriate
