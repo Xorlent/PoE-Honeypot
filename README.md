@@ -57,7 +57,7 @@ Hard resetting via RTS pin...
     - Example Syslog event for IP 10.70.103.12 connecting to UDP port 137:  
     ```<36>Mar 22 21:04:56 PoE-Honeypot UDP/137 (netbios-ns): Connection from 10.70.103.12```
     - Example Syslog event for IP 10.70.103.12 sending a ping request to the honeypot:
-    ```<36>Mar 22 21:15:32 PoE-Honeypot UDP/137 (netbios-ns): Connection from 10.70.103.12```
+    ```<36>Mar 22 21:15:45 PoE-Honeypot ICMP/Type 8 (echo-request): Ping request from 10.70.103.12```
 ## Guidance and Limitations
 - The device produces Syslog UDP messages in the BSD / RFC 3164 format.
 - Listening orts are fully user-configurable a few default personalities to choose from.
