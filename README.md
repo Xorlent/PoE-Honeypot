@@ -60,9 +60,9 @@ Hard resetting via RTS pin...
     ```<36>Mar 22 21:15:45 PoE-Honeypot ICMP/Type 8 (echo-request): Ping request from 10.70.103.12```
 ## Guidance and Limitations
 - The device produces Syslog UDP messages in the BSD / RFC 3164 format.
-- Listening orts are fully user-configurable a few default personalities to choose from.
+- Listening ports are fully user-configurable a few default personalities to choose from.
 - It is recommended you exempt your honeypot IP addresses in any legitimate vulnerability or network scanners to avoid triggering alerts.
-- The device will respond to pings (will not generate Syslog events) from any IP address within the routable network.
+- If ICMP is disabled in Config.h the device will respond to pings (will not generate events) from any IP address within the routable network.
 
 ## Technical Information
 - CPU and Memory
