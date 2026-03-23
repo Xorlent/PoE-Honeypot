@@ -48,7 +48,7 @@ Hard resetting via RTS pin...
 5. In Arduino
    - Select Tools->Serial Monitor
    - Address any configuration errors or warnings shown in the serial console
-     - If you did not immediately open the serial monitor, you may need to reboot the device to see the configuration check output
+     - If you did not immediately open the serial monitor, you may need to re-connect the device to see the configuration check output
 6. When configuration is complete, disconnect the USB cable
 7. Connect the device to a PoE network port and mount as appropriate
 8. Configure your syslog alerts:
@@ -61,9 +61,10 @@ Hard resetting via RTS pin...
     ```<36>Mar 22 21:15:45 PoE-Honeypot ICMP/Type 8 (echo-request): Ping request from 10.70.103.12```
 ## Guidance and Limitations
 - The device produces Syslog UDP messages in the BSD / RFC 3164 format.
-- Listening ports are fully user-configurable a few default personalities to choose from.
+- SMTP alerts require an unauthenticated SMTP relay that is configured to allow the honeypot IP address.
+- TCP and UDP listening ports are fully user-configurable with no constraints.
 - It is recommended you exempt your honeypot IP addresses in any legitimate vulnerability or network scanners to avoid triggering alerts.
-- If ICMP is disabled in Config.h the device will respond to pings (will not generate events) from any IP address within the routable network.
+- If ICMP is disabled in Config.h, the device will respond to pings from any IP address within the routable network.
 
 ## Technical Information
 - CPU and Memory
