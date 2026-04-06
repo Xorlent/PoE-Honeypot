@@ -13,13 +13,13 @@
 
 #include <IPAddress.h>
 
-// Port and service name structure for honeypot monitoring
+// Port and service name structure for TCP/UDP monitoring
 struct HoneypotPort {
   uint16_t port;
   const char* service;
 };
 
-// ICMP type and name structure for honeypot monitoring
+// ICMP type and name structure for monitoring
 struct HoneypotICMPType {
   uint8_t type;
   const char* name;
