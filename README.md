@@ -7,8 +7,8 @@ After completing the [$26 Honeypot project](https://github.com/Xorlent/The-26-Do
 Use this honeypot in conjunction with the [ESP32-Watchman](https://github.com/Xorlent/ESP32-Watchman) for full physical and network sensing capabilities with a total cost of under $60.
 
 ## To-do
-- SMTP testing
-- Variable port list size
+- End-to-end SMTP testing
+- Test extremely large port lists
 - Network stress test
 
 ## Requirements
