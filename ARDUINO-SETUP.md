@@ -6,4 +6,4 @@
      - Install version 3.3.7
 5. Open the Libraries Manager
    - Type "NTP" in the search field and select "NTP by Stefan Staub"
-     - Install version 1.7.1
+     - Install version 1.8.0
