@@ -1,0 +1,145 @@
+/*
+ * Config.h
+ * 
+ * Configuration settings for PoE-Honeypot
+ * Edit the values in this file to customize your honeypot deployment
+ * 
+ * GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * https://github.com/Xorlent/PoE-Honeypot
+ */
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#include <IPAddress.h>
+
+// Port and service name structure for honeypot monitoring
+struct HoneypotPort {
+  uint16_t port;
+  const char* service;
+};
+
+// ICMP type and name structure for honeypot monitoring
+struct HoneypotICMPType {
+  uint8_t type;
+  const char* name;
+};
+
+////////------------------------------------------- CONFIGURATION SETTINGS AREA --------------------------------------------////////
+
+// Device Identification
+const uint8_t hostName[] = "PoE-Honeypot"; // Set hostname, no spaces, no domain name per RFC 3164
+
+// Debug mode - enables verbose serial output showing events and syslog messages
+const bool DEBUG = false;
+
+////////// Network Configuration //////////
+
+    // Ethernet configuration:
+    const IPAddress ip(192, 168, 1, 61);        // Set device IP address.
+    const IPAddress gateway(192, 168, 1, 1);    // Set default gateway IP address.
+    const IPAddress subnet(255, 255, 255, 0);    // Set network subnet mask.
+    const IPAddress dns1(9, 9, 9, 9);            // Primary DNS
+    const IPAddress dns2(149, 112, 112, 112);    // Secondary DNS
+
+    // Logging method configuration:
+    // Choose logging method: true = SMTP relay, false = Syslog
+    const bool USE_SMTP = false;
+
+    // Syslog server configuration (used when USE_SMTP = false):
+    const IPAddress syslogSvr(192, 168, 1, 100); // Set Syslog collector IP address.
+    const uint16_t syslogPort = 514;       // Set Syslog collector UDP port.
+
+    // SMTP relay configuration (used when USE_SMTP = true):
+    const IPAddress smtpServer(192, 168, 1, 25); // SMTP relay server IP address
+    const uint16_t smtpPort = 25;          // SMTP relay port (usually 25)
+    static const char* smtpFromAddr = "honeypot@example.com";  // From email address
+    static const char* smtpToAddr = "security@example.com";    // To email address
+
+    // NTP server configuration:
+    // Select your NTP server info by configuring and uncommenting ONLY ONE line below:
+    //IPAddress ntpSvr(192, 168, 1, 2);    // Set internal NTP server IP address.
+    static const char* ntpSvr = "pool.ntp.org";   // Or set a NTP DNS server hostname.
+
+////////// Monitoring Configuration //////////
+
+////////// TCP Port Monitoring //////////
+
+    // Choose your honeypot personality by uncommenting ONE of the following arrays:
+    // Maximum service name: 64 characters
+
+    // Common enterprise TCP ports:
+    const HoneypotPort honeypotTCPPorts[] = {
+        {21, "ftp"}, {22, "ssh"}, {23, "telnet"}, {80, "http"}, 
+        {135, "epmap"}, {139, "netbios-ssn"}, {389, "ldap"}, {443, "https"}, 
+        {445, "microsoft-ds"}, {636, "ldaps"}, {1433, "ms-sql-s"}, {1521, "oracle"}, 
+        {3268, "msft-gc"}, {3306, "mysql"}, {3389, "rdp"}, {5432, "postgres"}, 
+        {5555, "personal-agent"}, {5900, "vnc"}, {5985, "winrm-http"}, {5986, "winrm-https"}, 
+        {8080, "http-alt"}, {8443, "https-alt"}
+    }; 
+
+    // Common OT/SCADA TCP ports:
+    //const HoneypotPort honeypotTCPPorts[] = {
+    //    {22, "ssh"}, {23, "telnet"}, {80, "http"}, {102, "siemens-s7"}, 
+    //    {502, "modbus"}, {2222, "rockwell-csp2"}, {4840, "opcua"}, {20000, "dnp3"}, 
+    //    {44818, "rockwell-encap"}, {47808, "bacnet"}, {18245, "ge-srtp"}, {18246, "ge-srtp"}, 
+    //    {34962, "profinet"}, {34964, "profinet"}, {34980, "profinet"}, {28784, "automationdirect"}
+    //};
+
+    // Custom TCP ports (edit as needed):
+    //const HoneypotPort honeypotTCPPorts[] = {
+    //    {22, "ssh"}, {80, "http"}, {443, "https"}, {3389, "rdp"}, {8080, "http-alt"}
+    //};
+
+////////// UDP Port Monitoring //////////
+
+    // Enable UDP monitoring
+    const bool MONITOR_UDP = true;
+
+    // UDP ports to monitor
+    // Choose your profile by uncommenting ONE of the following arrays:
+
+    // Common enterprise UDP ports:
+    const HoneypotPort honeypotUDPPorts[] = {
+        {53, "dns"}, {69, "tftp"}, {88, "kerberos"}, {123, "ntp"}, 
+        {138, "netbios-dgm"}, {161, "snmp"}, {500, "isakmp"}, {1900, "ssdp"}
+    };
+
+    // Common OT/SCADA UDP ports:
+    //const HoneypotPort honeypotUDPPorts[] = {
+    //    {502, "modbus"}, {4840, "opcua"}
+    //};
+
+    // Custom UDP ports (edit as needed):
+    //const HoneypotPort honeypotUDPPorts[] = {
+    //    {53, "dns"}, {123, "ntp"}, {161, "snmp"}
+    //};
+
+////////// ICMP Monitoring //////////
+
+    // Enable ICMP monitoring
+    // Note: Enabling ICMP prevents device from responding to ICMP packets
+    const bool MONITOR_ICMP = false;
+
+    // ICMP types to monitor
+    // Echo request types (8 = Echo Request, 42 = Extended Echo Request)
+    const HoneypotICMPType honeypotICMPTypes[] = {
+        {8, "echo-request"}, 
+        {42, "extended-echo-request"}
+    };
+
+////////// Holdoff Configuration //////////
+
+    // Prevents flooding syslog with repeated events from the same IP
+
+    // Maximum unique IPs to track per protocol
+    #define MAX_TRACKED_IPS 50
+
+    // Holdoff time in seconds for each protocol (0 = disabled)
+    const uint16_t TCP_HOLDOFF_SECONDS = 60;
+    const uint16_t UDP_HOLDOFF_SECONDS = 60;
+    const uint16_t ICMP_HOLDOFF_SECONDS = 60;
+
+////////--------------------------------------- END OF CONFIGURATION SETTINGS ---------------------------------------////////
+
+#endif // CONFIG_H
