@@ -142,4 +142,11 @@ const bool DEBUG = false;
 
 ////////--------------------------------------- END OF CONFIGURATION SETTINGS ---------------------------------------////////
 
+////////// Calculated Array Sizes (Do Not Edit) //////////
+
+    // Calculate array sizes for validation and iteration
+    const uint16_t honeypotNumPorts = sizeof(honeypotTCPPorts)/sizeof(honeypotTCPPorts[0]);
+    const uint16_t honeypotNumUDPPorts = sizeof(honeypotUDPPorts)/sizeof(honeypotUDPPorts[0]);
+    const uint16_t honeypotNumICMPTypes = sizeof(honeypotICMPTypes)/sizeof(honeypotICMPTypes[0]);
+
 #endif // CONFIG_H
