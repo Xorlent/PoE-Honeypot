@@ -58,7 +58,7 @@ const bool DEBUG = false;
 
     // NTP server configuration:
     // Select your NTP server info by configuring and uncommenting ONLY ONE line below:
-    //IPAddress ntpSvr(192, 168, 1, 2);    // Set internal NTP server IP address.
+    //const IPAddress ntpSvr(192, 168, 1, 2);    // Set internal NTP server IP address.
     static const char* ntpSvr = "pool.ntp.org";   // Or set a NTP DNS server hostname.
 
 ////////// Monitoring Configuration //////////
