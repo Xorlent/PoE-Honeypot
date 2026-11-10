@@ -40,6 +40,28 @@
 #define TCP_ACK   0x10U
 #endif
 
+#ifndef TCP_FIN
+#define TCP_FIN   0x01U
+#endif
+
+#ifndef TCP_PSH
+#define TCP_PSH   0x08U
+#endif
+
+#ifndef TCP_URG
+#define TCP_URG   0x20U
+#endif
+
+// Map an IANA IP protocol number to its holdoff bucket (ProtocolType).
+static ProtocolType protocolTypeFor(uint8_t ianaProtocol) {
+  switch (ianaProtocol) {
+    case IP_PROTO_UDP:  return PROTO_UDP;
+    case IP_PROTO_ICMP: return PROTO_ICMP;
+    case IP_PROTO_TCP:
+    default:            return PROTO_TCP;
+  }
+}
+
 #define ETH_ADDR        1
 #define ETH_POWER_PIN   51
 #define ETH_TYPE        ETH_PHY_TLK110
@@ -69,9 +91,11 @@ inline bool isBitSetInBitmap(const uint8_t* bitmap, uint16_t port) {
   return (bitmap[port >> 3] & (1 << (port & 0x07))) != 0;
 }
 
-// Syslog and NTP clients
+// Syslog and NTP clients (separate UDP sockets to avoid contention
+// between syslog output and NTP polling)
 WiFiUDP syslog;
-NTP ntp(syslog);
+WiFiUDP ntpUdp;
+NTP ntp(ntpUdp);
 
 // Logging system
 HoneypotLogging logger(hostName, ip, syslogSvr, syslogPort, DEBUG, 
@@ -173,6 +197,21 @@ static const char* getIPOptionsDescription(u8_t protocol) {
   }
 }
 
+// Classify stateless TCP probe flag combinations that cannot belong to a valid
+// connection. ACK/window scans are deliberately not covered: ACK-only traffic
+// is normal on our own outbound sessions (e.g. SMTP to the relay).
+static const char* classifyTcpProbeFlags(u8_t flags) {
+  const u8_t f = flags & 0x3F;   // ignore ECE/CWR
+
+  if (f == (TCP_FIN | TCP_PSH | TCP_URG)) return "xmas-scan";
+  if (f == TCP_FIN) return "fin-scan";
+  if (f == 0) return "null-scan";
+  if ((f & TCP_SYN) && (f & (TCP_FIN | TCP_PSH | TCP_URG))) return "invalid-flags";
+  if ((f & TCP_FIN) && !(f & TCP_ACK)) return "fin-scan";
+  if ((f & (TCP_PSH | TCP_URG)) && !(f & TCP_ACK)) return "invalid-flags";
+  return NULL;
+}
+
 // Update NTP if 10 minutes elapsed
 void updateNTPIfNeeded() {
   unsigned long currentMillis = millis();
@@ -237,7 +276,7 @@ static u8_t raw_recv_callback(void *arg, struct raw_pcb *pcb, struct pbuf *p, co
     
     const char* fragDesc = getFragmentDescription(protocol);
     
-    logger.enqueueLogEvent(0, sourceIPAddr, PROTO_TCP, fragDesc);
+    logger.enqueueLogEvent(0, sourceIPAddr, protocolTypeFor(protocol), fragDesc);
     
     // Drop fragmented packets
     pbuf_free(p);
@@ -253,7 +292,7 @@ static u8_t raw_recv_callback(void *arg, struct raw_pcb *pcb, struct pbuf *p, co
     
     const char* optDesc = getIPOptionsDescription(protocol);
     
-    logger.enqueueLogEvent(0, sourceIPAddr, PROTO_TCP, optDesc);
+    logger.enqueueLogEvent(0, sourceIPAddr, protocolTypeFor(protocol), optDesc);
     
     // Drop packets with IP options
     pbuf_free(p);
@@ -282,8 +321,8 @@ static u8_t raw_recv_callback(void *arg, struct raw_pcb *pcb, struct pbuf *p, co
     // Extract destination port
     uint16_t dest_port = ntohs(tcphdr->dest);
     
-    // Check for SYN without ACK (new connection)
-    u8_t flags = TCPH_FLAGS(tcphdr);
+    // Extract flag byte (ignore ECE/CWR)
+    u8_t flags = TCPH_FLAGS(tcphdr) & 0x3F;
     bool is_syn = (flags & TCP_SYN) != 0;
     bool is_ack = (flags & TCP_ACK) != 0;
     
@@ -297,7 +336,26 @@ static u8_t raw_recv_callback(void *arg, struct raw_pcb *pcb, struct pbuf *p, co
         // Filtering (broadcast/multicast/holdoff) happens in main loop
         logger.enqueueLogEvent(dest_port, sourceIPAddr, PROTO_TCP, getTCPServiceName(dest_port));
       }
+      // Consume the SYN so the honeypot does not answer the connection attempt
+      pbuf_free(p);
+      return 1;
     }
+    
+    // Report stateless probes on monitored ports and consume them so the
+    // honeypot does not answer with RST.
+    const char* probeDesc = classifyTcpProbeFlags(flags);
+    if (probeDesc != NULL) {
+      if (isHoneypotTCPPort(dest_port)) {
+        uint32_t sourceIPAddr = ip4_addr_get_u32(&iphdr->src);
+        logger.enqueueLogEvent(dest_port, sourceIPAddr, PROTO_TCP, probeDesc);
+      }
+      pbuf_free(p);
+      return 1;
+    }
+
+    // Not a probe (SYN-ACK, ACK, data, FIN+ACK, RST, ...) - let the normal TCP
+    // stack handle it so outgoing connections (e.g. SMTP to the relay) work.
+    return 0;
   }
   
   // Handle UDP
@@ -328,7 +386,15 @@ static u8_t raw_recv_callback(void *arg, struct raw_pcb *pcb, struct pbuf *p, co
       // Enqueue event for main loop processing
       // Filtering (broadcast/multicast/holdoff) happens in main loop
       logger.enqueueLogEvent(dest_port, sourceIPAddr, PROTO_UDP, getUDPServiceName(dest_port));
+      
+      pbuf_free(p);
+      return 1;
     }
+    
+    // Not a monitored port: pass through so legitimate UDP traffic
+    // (e.g. NTP responses on the NTP client's ephemeral port) reaches the
+    // normal UDP stack.
+    return 0;
   }
   
   // Handle ICMP
