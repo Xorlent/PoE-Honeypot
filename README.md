@@ -27,6 +27,7 @@ This project produces a honeypot that listens on any number of user-configurable
 - Email to and from addresses if email (USE_SMTP) is configured
 - NTP server
 - TCP and/or UDP ports to listen on
+- Optional custom MAC address (USE_CUSTOM_MAC in Config.h) to mask the Espressif OUI
 ### Configure and flash the device:
 _Once you've successfully programmed a single unit, skip steps 1 & 2.  Repeating this process takes 3 minutes from start to finish._  
 1. [Set up your Arduino programming environment](https://github.com/Xorlent/PoE-Honeypot/blob/main/ARDUINO-SETUP.md)
@@ -68,6 +69,7 @@ Hard resetting via RTS pin...
 - SMTP alerts require an unauthenticated SMTP relay that is configured to allow the honeypot IP address.
 - TCP and UDP listening ports are fully user-configurable with no constraints.
 - It is recommended you exempt your honeypot IP addresses in any legitimate vulnerability or network scanners to avoid triggering alerts.
+- A custom MAC (USE_CUSTOM_MAC) is applied at boot only and is never written to eFuse; never assign the same MAC to two devices on one network segment.
 - If ICMP is disabled in Config.h, the device will respond to pings from any IP address within the routable network.
 
 ## Technical Information

@@ -42,6 +42,24 @@ const bool DEBUG = false;
     const IPAddress dns1(9, 9, 9, 9);            // Primary DNS
     const IPAddress dns2(149, 112, 112, 112);    // Secondary DNS
 
+    // Optional Ethernet MAC address override.
+    // Spoofing a vendor MAC can help make the honeypot look like a legitimate device.
+    // In the unlikely event a duplicate MAC on the same segment, you will see switch port flapping and ARP
+    // conflicts. If you need to fix a MAC collision, just change the value of the last three bytes for your selected MAC.
+    // 0 = use the factory MAC (no custom MAC is compiled in), 1 = use the customMAC selected below.
+    #define USE_CUSTOM_MAC 0
+
+#if USE_CUSTOM_MAC
+
+    // Set USE_CUSTOM_MAC to 1 and uncomment ONE example below.  You can also customize a MAC as desired.
+    //const uint8_t customMAC[6] = {0x70, 0x0F, 0x6A, 0x1A, 0x2B, 0x3C};  // Cisco switch
+    //const uint8_t customMAC[6] = {0x70, 0x4C, 0xA5, 0x0D, 0x1E, 0x2F};  // Fortinet firewall
+    //const uint8_t customMAC[6] = {0xD8, 0xC7, 0xC8, 0x3E, 0x4F, 0x50};  // Aruba Wi-Fi AP
+    //const uint8_t customMAC[6] = {0x94, 0x57, 0xA5, 0x6A, 0x7B, 0x8C};  // HP server (iLO)
+    //const uint8_t customMAC[6] = {0xB8, 0x2A, 0x72, 0x9D, 0x0E, 0x1F};  // Dell server (iDRAC)
+    //const uint8_t customMAC[6] = {0x5C, 0x88, 0x16, 0x2B, 0x3C, 0x4D};  // Allen-Bradley ControlLogix
+#endif
+
     // Logging method configuration:
     // Choose logging method: true = SMTP relay, false = Syslog
     const bool USE_SMTP = false;

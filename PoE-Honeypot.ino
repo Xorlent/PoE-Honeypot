@@ -16,6 +16,7 @@
 ////////--------------------------------------- DO NOT EDIT ANYTHING BELOW THIS LINE ---------------------------------------////////
 
 #include <ETH.h>
+#include <esp_mac.h>
 #include <WiFiUdp.h>
 #include <NTP.h>
 #include <lwip/ip.h>
@@ -75,6 +76,10 @@ static ProtocolType protocolTypeFor(uint8_t ianaProtocol) {
 static_assert(honeypotNumPorts <= 65535, "TCP port array exceeds maximum size");
 static_assert(honeypotNumUDPPorts <= 65535, "UDP port array exceeds maximum size");
 static_assert(honeypotNumICMPTypes <= 255, "ICMP type array exceeds maximum size");
+
+#if USE_CUSTOM_MAC
+static_assert(sizeof(customMAC) == 6, "customMAC must contain exactly 6 bytes");
+#endif
 
 // Port bitmaps for O(1) lookups (65536 ports = 8192 bytes each)
 // Bit N set = port N is monitored
@@ -432,6 +437,27 @@ static u8_t raw_recv_callback(void *arg, struct raw_pcb *pcb, struct pbuf *p, co
   return 1;
 }
 
+#if USE_CUSTOM_MAC
+// Program the MAC table entry that the EMAC driver reads during ETH.begin().
+static bool applyCustomMAC() {
+  esp_err_t err = esp_iface_mac_addr_set(customMAC, ESP_MAC_ETH);
+  if (err != ESP_OK) {
+    Serial.print("ERROR: esp_iface_mac_addr_set failed: ");
+    Serial.println(esp_err_to_name(err));
+    return false;
+  }
+  return true;
+}
+
+static void printMAC(const char* label, const uint8_t* mac) {
+  char macStr[18];
+  snprintf(macStr, sizeof(macStr), "%02X:%02X:%02X:%02X:%02X:%02X",
+           mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+  Serial.print(label);
+  Serial.println(macStr);
+}
+#endif
+
 void setup() {
   Serial.begin(115200);
   while (!Serial) {
@@ -447,6 +473,17 @@ void setup() {
       delay(1000);
     }
   }
+
+#if USE_CUSTOM_MAC
+  // Apply the optional MAC override before the EMAC driver reads ESP_MAC_ETH
+  if (!applyCustomMAC()) {
+    Serial.println("HALTED: Could not apply USE_CUSTOM_MAC from Config.h");
+    while(1) {
+      delay(1000);
+    }
+  }
+  printMAC("Custom MAC: ", customMAC);
+#endif
 
   Serial.print("Monitoring ");
   Serial.print(honeypotNumPorts);
@@ -499,6 +536,17 @@ void setup() {
   Serial.println("Ethernet connected.");
   Serial.print("IP Address: ");
   Serial.println(ETH.localIP());
+  Serial.print("MAC Address: ");
+  Serial.println(ETH.macAddress());
+
+#if USE_CUSTOM_MAC
+  // Confirm the override reached the interface that lwIP uses for TX
+  uint8_t activeMAC[6];
+  ETH.macAddress(activeMAC);
+  if (memcmp(activeMAC, customMAC, 6) != 0) {
+    Serial.println("WARNING: Active MAC does not match customMAC from Config.h");
+  }
+#endif
 
   // Start NTP
   ntp.begin(ntpSvr);

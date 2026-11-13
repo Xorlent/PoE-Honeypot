@@ -143,6 +143,37 @@ bool validateConfiguration() {
     hasWarnings = true;
   }
   
+#if USE_CUSTOM_MAC
+  // Validate custom MAC address (applied at boot only)
+  bool macAllZero = true;
+  bool macAllFF = true;
+  for (int i = 0; i < 6; i++) {
+    if (customMAC[i] != 0x00) {
+      macAllZero = false;
+    }
+    if (customMAC[i] != 0xFF) {
+      macAllFF = false;
+    }
+  }
+  
+  if (macAllZero) {
+    Serial.println("ERROR: customMAC is 00:00:00:00:00:00 (invalid)");
+    hasErrors = true;
+  }
+  if (macAllFF) {
+    Serial.println("ERROR: customMAC is FF:FF:FF:FF:FF:FF (broadcast, invalid)");
+    hasErrors = true;
+  }
+  if (customMAC[0] & 0x01) {
+    Serial.println("ERROR: customMAC has the multicast/group bit set (must be unicast)");
+    hasErrors = true;
+  } else if (!(customMAC[0] & 0x02)) {
+    Serial.println("WARNING: customMAC is a universal (OUI-assigned) address");
+    Serial.println("         Verify no real device with this MAC is on the same network segment");
+    hasWarnings = true;
+  }
+#endif
+  
   // Validate holdoff values
   if (TCP_HOLDOFF_SECONDS > 600) {
     Serial.println("WARNING: TCP_HOLDOFF_SECONDS excessively large (may miss events)");
