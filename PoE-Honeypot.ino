@@ -460,9 +460,7 @@ static void printMAC(const char* label, const uint8_t* mac) {
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial) {
-      delay(100);
-  }
+  delay(500);
   
   Serial.println("Starting...");
 
